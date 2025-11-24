@@ -1,0 +1,294 @@
+{% extends "../base/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static "css/transport.css" %}">
+<link rel="stylesheet" href="{% static "css/animation.css" %}">
+<style>
+    /* Fix for navbar issues on transport page */
+    @media (max-width: 767px) {
+        .nav.active {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+           
+        }
+        
+    
+    }
+    
+
+    .nav a {
+        color: var(--electric-green);;
+    }
+
+    /* Ensure content starts below fixed navbar */
+    .parallax-section {
+        margin-top: 120px;
+    }
+
+    /* Fix z-index issues */
+    .header {
+        z-index: 1000 !important;
+    }
+
+    .mobile-menu-btn {
+        z-index: 1002 !important;
+    }
+
+    .nav {
+        z-index: 1001 !important;
+    }
+
+    @media (max-width: 768px) {
+        .parallax-section {
+            margin-top: 100px;
+        }
+    }
+</style>
+
+<section class="parallax-section" id="hero">
+    <div class="container">
+        <div class="parallax-grid">
+            <div class="parallax-content">
+                <span class="section-label">Our Mission</span>
+                <h2>Driving Progress with Purpose</h2>
+                <p>To build strong foundations, innovate for progress, and bridge markets by connecting local potential with global opportunities.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        24/7 Intelligent Fleet Monitoring
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Sustainable & Energy-Efficient Fleet Options
+                    </li>
+                </ul>
+            </div>
+            {% if hero_media %}
+            {% if hero_media.transportation_background_image.url %}
+            <div class="parallax-image-container">
+                <img src="{{hero_media.transportation_background_image.url}}" alt="Evolve Transport Fleet Vehicle">
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="stats-section" >
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" data-target="7">0</div>
+                <div class="stat-label">Years of Industrial experience</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="20">0</div>
+                <div class="stat-label">Transport Vessels</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="1B">0</div>
+                <div class="stat-label">billion ETB completed projects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number percent" data-target="98">0</div>
+                <div class="stat-label">Client Satisfaction Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="vehicles" class="vehicles-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Our Fleet</span>
+            <h2>Purpose-Built Vehicles for Every Mission</h2>
+            <p>From executive mobility to industrial logistics, our fleet embodies Evolve's values — reliability, innovation, and sustainability in motion.</p>
+        </div>
+
+        <div class="vehicles-grid">
+            {% for vehicle in vehicles %}
+            <div class="vehicle-card">
+                <div class="vehicle-image">
+                    <img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}">
+                    <div class="vehicle-overlay">
+                        <a href="#" class="btn btn-small">View Details</a>
+                    </div>
+                </div>
+
+                <div class="vehicle-info">
+                    <h3>{{ vehicle.name }}</h3>
+
+                    {% if vehicle.tagline %}
+                    <p>{{ vehicle.tagline }}</p>
+                    {% else %}
+                    <p>{{ vehicle.description }}</p>
+                    {% endif %}
+
+                    <ul class="vehicle-features">
+                        {% for feature in vehicle.features.all %}
+                        <li>{{ feature.feature_text }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<section id="about" class="about-section">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-content">
+                <span class="section-label">About Evolve Transport</span>
+                <h2>Engineering the Future of Mobility</h2>
+                <p class="about-intro">Established in 2019, Evolve Business Group is a diversified holding company dedicated to driving progress across multiple industries. Since its inception, the Group has steadily expanded its portfolio, bringing together strategic businesses in import and export, Transport, construction, and industrial.</p>
+                <p>We combine advanced fleet technology with a deep understanding of local and global logistics to create transport systems that move more than cargo — they move economies. Every journey reflects our promise of efficiency, safety, and sustainability.</p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="feature-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <path d="M20 5L25 15H35L27.5 22.5L30 32.5L20 25L10 32.5L12.5 22.5L5 15H15L20 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Innovation First</h3>
+                        <p>We integrate technology and foresight to redefine modern mobility and industrial logistics.</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feature-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <path d="M20 35C28.2843 35 35 28.2843 35 20C35 11.7157 28.2843 5 20 5C11.7157 5 5 11.7157 5 20C5 28.2843 11.7157 35 20 35Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M20 15V20L25 25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3>Reliability</h3>
+                        <p>Every operation is guided by consistency, precision, and trust — the hallmarks of Evolve.</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feature-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <path d="M20 5C20 5 5 12.5 5 20C5 27.5 11.7157 35 20 35C28.2843 35 35 27.5 35 20C35 12.5 20 5 20 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M15 20L18.5 23.5L25 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Safety First</h3>
+                        <p>Our fleets are maintained to international standards, ensuring every journey is secure and reliable.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <div class="about-logo">
+                    <span class="logo-large"><img src="{% static 'images/logo/LOGO-H.png' %}" /></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="contact-section">
+    <div class="contact-overlay"></div>
+    <div class="container">
+        <div class="contact-content">
+            <div class="contact-info">
+                <span class="section-label">Get in Touch</span>
+                <h2>Partner with Evolve Transport</h2>
+                <p>Let's drive progress together. Reach out to learn how our transport solutions can strengthen your supply chain and power your next move.</p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <img src="{% static 'icons/white-location-icon.png' %}" height="45">
+                        <div>
+                            <h4>Location</h4>
+                            <p>Addis Ababa, Ethiopia</p>
+                        </div>
+                    </div>
+                    {% if website_info and website_info.phone %}
+                    <div class="contact-item">
+                        <img src="{% static 'icons/white-phone-icon.png' %}" height="45">
+                        <div>
+                            <h4>Phone</h4>
+                            <p>{{website_info.phone}}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if website_info and website_info.email %}
+                    <div class="contact-item">
+                        <img src="{% static 'icons/white-email-icon.png' %}" height="45">
+                        <div>
+                            <h4>Email</h4>
+                            <p>{{website_info.email}}</p>
+                        </div>                        
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="contact-map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509569!2d144.95373531584453!3d-37.81627944202138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43e5b1e7f3%3A0x5045675218ce6e0!2sBusiness%20District!5e0!3m2!1sen!2set!4v1696867545209!5m2!1sen!2set"
+                    width="100%"
+                    height="450"
+                    style="border:0; border-radius: 12px;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/transport.js' %}"></script>
+
+<script>
+    // Enhanced navbar functionality for transport page
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.getElementById('nav');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const header = document.getElementById('header');
+        
+        // Ensure mobile menu works properly
+        if (mobileMenuBtn && nav) {
+            // Re-add event listeners to ensure they work
+            mobileMenuBtn.addEventListener('click', () => {
+                nav.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+                if (mobileMenuOverlay) {
+                    mobileMenuOverlay.classList.toggle('active');
+                }
+                document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+        
+        // Close mobile menu when clicking on nav links
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (nav) nav.classList.remove('active');
+                if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+                if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Enhanced scroll functionality for navbar
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (header) {
+                const scrolled = window.scrollY > 100;
+                if (scrolled) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+        });
+    });
+</script>
+{% endblock content %}

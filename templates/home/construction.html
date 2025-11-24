@@ -1,0 +1,201 @@
+{% extends "../base/base.html" %}
+{% load static %}
+{% load cache %}
+
+{# ---------- SEO for Construction Page ---------- #}
+{% block title %}Evolve Construction | Sustainable Infrastructure & Smart Cities in Ethiopia{% endblock %}
+{% block description %}Evolve Construction delivers innovative and sustainable infrastructure across Ethiopia. Discover our smart building practices, community projects, and industrial solutions.{% endblock %}
+{% block meta_keywords %}Evolve, Construction, Ethiopia, Smart Infrastructure, Sustainable Building, Industrial Projects, Community Housing, Civil Engineering{% endblock %}
+
+{% block meta_tags %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evolve Construction | Sustainable Infrastructure & Smart Cities in Ethiopia">
+<meta property="og:description" content="Evolve Construction delivers innovative and sustainable infrastructure across Ethiopia. Discover our smart building practices, community projects, and industrial solutions.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/logo/LOGO-H-Secondary.png' %}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Evolve Construction | Sustainable Infrastructure & Smart Cities in Ethiopia">
+<meta name="twitter:description" content="Evolve Construction delivers innovative and sustainable infrastructure across Ethiopia. Discover our smart building practices, community projects, and industrial solutions.">
+<meta name="twitter:image" content="{% static 'images/logo/LOGO-H-Secondary.png' %}">
+{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Evolve Construction",
+  "url": "{{ request.build_absolute_uri }}",
+  "logo": "{% static 'images/logo/LOGO-H-Secondary.png' %}",
+  "description": "Evolve Construction delivers innovative and sustainable infrastructure across Ethiopia. Discover our smart building practices, community projects, and industrial solutions."
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cons.css' %}">
+
+{% cache 7200 hero_section %}
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    {% if hero_media %}
+    {% if hero_media.construction_background_video %}
+    <video class="hero-video" autoplay muted loop playsinline>
+        <source src="{{ hero_media.construction_background_video.url }}" type="video/mp4">
+        <!-- Add fallback image if video doesn't load -->
+         {% elif hero_media.construction_background_image %}
+        <img src="{{ hero_media.construction_background_image.url }}" alt="Construction background" style="width: 100%; height: 100%; object-fit: cover;">
+        {% endif %}
+    </video>
+    {% endif %}
+    <div class="hero-content">
+        <h1 class="cinematic-text" data-animation="fade-up">
+            Building a <span class="italic">Stronger Tomorrow</span>
+        </h1>
+        <p class="hero-subtitle cinematic-text" data-animation="fade-up" data-delay="200">
+            Sustainable infrastructure. Local impact. Lasting value.
+        </p>
+    </div>
+</section>
+{% endcache %}
+
+
+<br><br><br><br>
+{% cache 3600 construction_clients %}
+<div class="logo-scroll-section">
+    <div class="logo-scroll-container">
+        <div class="logo-scroll-track">
+            {% for client in construction_clients %}
+                {% if client.logo and client.active %}
+                <img src="{{ client.logo.url }}" alt="{{ client.name }} Logo" class="logo-item" height="50">
+                {% endif %}
+            {% endfor %}
+            <!-- Duplicate for seamless loop -->
+            {% for client in construction_clients %}
+                {% if client.logo and client.active %}
+                <img src="{{ client.logo.url }}" alt="{{ client.name }} Logo" class="logo-item" height="50">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endcache %}
+
+
+{% cache 600 construction_featured_project %}
+<!-- Construction Portfolio Section -->
+<section class="news-insights" id="insights">
+  <div class="container">
+    <h2 class="section-title cinematic-text" data-animation="fade-up">Our Construction Projects</h2>
+    <div class="news-grid">
+
+      {% if featured_project %}
+      <!-- Featured Project -->
+      <article class="news-card news-card-large">
+        {% if featured_project.featured_image %}
+        <img src="{{ featured_project.featured_image.url }}" alt="{{ featured_project.title }}" loading="lazy">
+        {% else %}
+        <img src="/placeholder.svg?height=400&width=600" alt="{{ featured_project.title }}" loading="lazy">
+        {% endif %}
+        <div class="news-content">
+          <h3>{{ featured_project.title }}</h3>
+          <p>{{ featured_project.short_description|default:featured_project.description|truncatewords:20 }}</p>
+          <a href="{% url 'portfolio' %}" class="read-more">View Project →</a>
+        </div>
+      </article>
+      {% endif %}
+
+      <!-- Regular Projects -->
+      {% for project in construction_projects %}
+      <article class="news-card">
+        {% if project.featured_image %}
+        <img src="{{ project.featured_image.url }}" alt="{{ project.title }}" loading="lazy">
+        {% else %}
+        <img src="/placeholder.svg?height=300&width=400" alt="{{ project.title }}" loading="lazy">
+        {% endif %}
+        <div class="news-content">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.short_description|default:project.description|truncatewords:15 }}</p>
+          <a href="{% url 'portfolio'%}" class="read-more">View Project →</a>
+        </div>
+      </article>
+      {% empty %}
+      <p>No construction projects available yet.</p>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+{% endcache %}
+
+<!-- Community Section -->
+<section class="community">
+    <div class="container">
+        <div class="community-content">
+            <div class="community-image">
+                
+            </div>
+            <div class="community-text">
+                <span class="label">IMPACT</span>
+                <h2 class="cinematic-text" data-animation="fade-up">Building Communities That Thrive</h2>
+                <p>We go beyond construction — we create environments that nurture opportunity, empower local talent, and strengthen economies across Ethiopia.</p>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Culture Section -->
+<section class="culture" id="company">
+    <div class="container">
+        <h2 class="section-title cinematic-text" data-animation="fade-up">Our Culture</h2>
+        <p class="culture-intro">
+            We are driven by purpose and guided by values. At Evolve Construction, our culture is built on excellence, accountability, and sustainability — shaping progress while leaving a positive mark on the world around us.
+        </p>
+        
+        <div class="culture-content">
+            <div class="culture-card">
+                <div class="esg-box">
+                    <div class="esg-item">Sustainability</div>
+                    <div class="esg-item">Integrity</div>
+                    <div class="esg-item">Innovation</div>
+                    <div class="esg-item">People</div>
+                    <div class="esg-item">Planet</div>
+                </div>
+                <div class="culture-text">
+                    <span class="label">ENVIRONMENTAL, SOCIAL, AND GOVERNANCE STRATEGY</span>
+                    <h3 class="cinematic-text" data-animation="fade-up">Building Responsibly for Generations Ahead</h3>
+                    <p>We design and construct with responsibility — ensuring every project supports environmental sustainability, social growth, and transparent governance.</p>
+                    <a href="#" class="read-more">Learn more →</a>
+                </div>
+            </div>
+            <div class="culture-image">
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Careers Section -->
+<section class="careers" id="careers">
+    <div class="container">
+        <div class="careers-content">
+            <div class="careers-image">
+                
+            </div>
+            <div class="careers-text">
+                <span class="label">CAREERS AT EVOLVE</span>
+                <h2 class="cinematic-text" data-animation="fade-up">Empowering People to Build the Future</h2>
+                <p>Let's partner to reshaping Ethiopia's industrial and infrastructure landscape. At Evolve Construction, your ideas are built to the foundation for a stronger nation.</p>
+                {% if website_info %}
+                <a href="tel:{{website_info.phone}}" class="btn-primary">Call Us Right NOW →</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src={% static 'js/cons.js' %}></script>
+{% endblock content %}

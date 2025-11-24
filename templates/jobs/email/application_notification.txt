@@ -1,0 +1,23 @@
+<!-- templates/jobs/email/application_notification.txt -->
+NEW JOB APPLICATION
+
+Position: {{ job.title }}
+Company: {{ job.company }}
+Submission Date: {{ submission_date|date:"F j, Y g:i A" }}
+
+APPLICANT INFORMATION
+Name: {{ application.name }}
+Email: {{ application.email }}
+Phone: {{ application.phone }}
+Address: {{ application.address }}
+
+COVER LETTER
+{{ application.cover_letter }}
+
+JOB DETAILS
+Location: {{ job.location }}
+Type: {{ job.get_job_type_display }}
+{% if job.department %}Department: {{ job.department }}{% endif %}
+{% if job.salary_range %}Salary Range: {{ job.salary_range }}{% endif %}
+
+Resume attached to this email.

@@ -1,0 +1,335 @@
+{% extends "../base/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static "css/portfolio.css" %}">
+        
+<section class="hero-section" id="hero">
+    <div class="hero-content">
+        <h1>Our Work</h1>
+        <p>Explore the works we have done</p>
+    </div>
+</section>
+
+<!-- Navigation Tabs -->
+<div class="portfolio-nav">
+    <div class="nav-container">
+        <a href="#construction" class="nav-item">Construction</a>
+        <a href="#industrial" class="nav-item">Industrial</a>
+        <a href="#transportation" class="nav-item">Transportation</a>
+        <a href="#import-export" class="nav-item">Import & Export</a>
+    </div>
+</div>
+
+<!-- Construction Section -->
+<section id="construction" class="category-section">
+    <div class="category-header">
+        <h2>Construction</h2>
+        <p>Building the future with innovative construction solutions</p>
+    </div>
+    <div class="masonry-grid">
+        {% for item in construction_items %}
+        <div class="grid-item" onclick="openModal(
+            '{{ item.title|escapejs }}', 
+            '{{ item.description|escapejs }}', 
+            '{% if item.primary_image %}{{ item.primary_image.url }}{% else %}{% static "images/placeholder.jpg" %}{% endif %}',
+            '{{ item.client_name|escapejs }}',
+            '{{ item.location|escapejs }}',
+            '{{ item.project_date|date:"F Y" }}',
+            '{{ item.status|title }}',
+            '{{ item.budget|default:"" }}'
+        )">
+            {% if item.primary_image %}
+                <img src="{{ item.primary_image.url }}" alt="{{ item.title }}">
+            {% else %}
+                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ item.title }}">
+            {% endif %}
+            <div class="image-overlay">
+                <div class="overlay-content">
+                    <h4>{{ item.title }}</h4>
+                    <p>{{ item.short_description|default:item.description|truncatewords:15 }}</p>
+                    <div class="overlay-text">View Details</div>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter == 3 %}
+        <div class="cta-card">
+            <h3>Stand out from the crowd</h3>
+            <p>And gain the power to build your dream construction</p>
+            <button class="demo-btn">Request A Demo</button>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="no-items">
+            <p>No construction projects available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Industrial Section -->
+<section id="industrial" class="category-section">
+    <div class="category-header">
+        <h2>Industrial</h2>
+        <p>Powering industries with cutting-edge solutions</p>
+    </div>
+    <div class="masonry-grid">
+        {% for item in industrial_items %}
+        <div class="grid-item" onclick="openModal(
+            '{{ item.title|escapejs }}', 
+            '{{ item.description|escapejs }}', 
+            '{% if item.primary_image %}{{ item.primary_image.url }}{% else %}{% static "images/placeholder.jpg" %}{% endif %}',
+            '{{ item.client_name|escapejs }}',
+            '{{ item.location|escapejs }}',
+            '{{ item.project_date|date:"F Y" }}',
+            '{{ item.status|title }}',
+            '{{ item.budget|default:"" }}'
+        )">
+            {% if item.primary_image %}
+                <img src="{{ item.primary_image.url }}" alt="{{ item.title }}">
+            {% else %}
+                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ item.title }}">
+            {% endif %}
+            <div class="image-overlay">
+                <div class="overlay-content">
+                    <h4>{{ item.title }}</h4>
+                    <p>{{ item.short_description|default:item.description|truncatewords:15 }}</p>
+                    <div class="overlay-text">View Details</div>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter == 3 %}
+        <div class="cta-card">
+            <h3>Transform Your Industry</h3>
+            <p>Leverage our expertise to modernize your industrial operations</p>
+            <button class="demo-btn">Get Started</button>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="no-items">
+            <p>No industrial projects available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Transportation Section -->
+<section id="transportation" class="category-section">
+    <div class="category-header">
+        <h2>Transportation</h2>
+        <p>Moving the world forward with efficient logistics</p>
+    </div>
+    <div class="masonry-grid">
+        {% for item in transportation_items %}
+        <div class="grid-item" onclick="openModal(
+            '{{ item.title|escapejs }}', 
+            '{{ item.description|escapejs }}', 
+            '{% if item.primary_image %}{{ item.primary_image.url }}{% else %}{% static "images/placeholder.jpg" %}{% endif %}',
+            '{{ item.client_name|escapejs }}',
+            '{{ item.location|escapejs }}',
+            '{{ item.project_date|date:"F Y" }}',
+            '{{ item.status|title }}',
+            '{{ item.budget|default:"" }}'
+        )">
+            {% if item.primary_image %}
+                <img src="{{ item.primary_image.url }}" alt="{{ item.title }}">
+            {% else %}
+                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ item.title }}">
+            {% endif %}
+            <div class="image-overlay">
+                <div class="overlay-content">
+                    <h4>{{ item.title }}</h4>
+                    <p>{{ item.short_description|default:item.description|truncatewords:15 }}</p>
+                    <div class="overlay-text">View Details</div>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter == 5 %}
+        <div class="cta-card">
+            <h3>Optimize Your Logistics</h3>
+            <p>Discover how we can streamline your transportation operations</p>
+            <button class="demo-btn">Learn More</button>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="no-items">
+            <p>No transportation projects available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Import & Export Section -->
+<section id="import-export" class="category-section">
+    <div class="category-header">
+        <h2>Import & Export</h2>
+        <p>Connecting global markets with seamless trade solutions</p>
+    </div>
+    <div class="masonry-grid">
+        {% for item in import_export_items %}
+        <div class="grid-item" onclick="openModal(
+            '{{ item.title|escapejs }}', 
+            '{{ item.description|escapejs }}', 
+            '{% if item.primary_image %}{{ item.primary_image.url }}{% else %}{% static "images/placeholder.jpg" %}{% endif %}',
+            '{{ item.client_name|escapejs }}',
+            '{{ item.location|escapejs }}',
+            '{{ item.project_date|date:"F Y" }}',
+            '{{ item.status|title }}',
+            '{{ item.budget|default:"" }}'
+        )">
+            {% if item.primary_image %}
+                <img src="{{ item.primary_image.url }}" alt="{{ item.title }}">
+            {% else %}
+                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ item.title }}">
+            {% endif %}
+            <div class="image-overlay">
+                <div class="overlay-content">
+                    <h4>{{ item.title }}</h4>
+                    <p>{{ item.short_description|default:item.description|truncatewords:15 }}</p>
+                    <div class="overlay-text">View Details</div>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter == 2 %}
+        <div class="cta-card">
+            <h3>Expand Globally</h3>
+            <p>Partner with us to reach new international markets</p>
+            <button class="demo-btn">Contact Us</button>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="no-items">
+            <p>No import/export projects available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Enhanced Modal -->
+<div class="modal" id="projectModal">
+    <div class="modal-backdrop" onclick="closeModal()"></div>
+    <div class="modal-container">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="modal-image-container">
+                <img id="modalImage" src="" alt="Project Image">
+            </div>
+            <div class="modal-text-content">
+                <h3 id="modalTitle"></h3>
+                <div class="project-meta">
+                    <div class="meta-item" id="modalClient"></div>
+                    <div class="meta-item" id="modalLocation"></div>
+                    <div class="meta-item" id="modalDate"></div>
+                    <div class="meta-item" id="modalStatus"></div>
+                    <div class="meta-item" id="modalBudget"></div>
+                </div>
+                <div class="modal-description">
+                    <p id="modalDescription"></p>
+                </div>
+                <div class="modal-actions">
+                    <button class="demo-btn secondary" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function openModal(title, description, imageUrl, client, location, date, status, budget) {
+        const modal = document.getElementById('projectModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalImage = document.getElementById('modalImage');
+        const modalClient = document.getElementById('modalClient');
+        const modalLocation = document.getElementById('modalLocation');
+        const modalDate = document.getElementById('modalDate');
+        const modalStatus = document.getElementById('modalStatus');
+        const modalBudget = document.getElementById('modalBudget');
+        
+        // Set content
+        modalTitle.textContent = title;
+        modalDescription.textContent = description;
+        modalImage.src = imageUrl;
+        modalImage.alt = title;
+        
+        // Set meta information
+        modalClient.innerHTML = client ? `<strong>Client:</strong> ${client}` : '';
+        modalClient.style.display = client ? 'block' : 'none';
+        
+        modalLocation.innerHTML = location ? `<strong>Location:</strong> ${location}` : '';
+        modalLocation.style.display = location ? 'block' : 'none';
+        
+        modalDate.innerHTML = date ? `<strong>Date:</strong> ${date}` : '';
+        modalDate.style.display = date ? 'block' : 'none';
+        
+        modalStatus.innerHTML = status ? `<strong>Status:</strong> ${status}` : '';
+        modalStatus.style.display = status ? 'block' : 'none';
+        
+        modalBudget.innerHTML = budget ? `<strong>Budget:</strong> ETB${parseFloat(budget).toLocaleString()}` : '';
+        modalBudget.style.display = budget ? 'block' : 'none';
+        
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('projectModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // Close modal when clicking backdrop
+    document.querySelector('.modal-backdrop').addEventListener('click', closeModal);
+
+    // Smooth scroll for navigation with offset for fixed header
+    document.querySelectorAll('.nav-item').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const target = document.querySelector(targetId);
+            if (target) {
+                const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Add active class to nav items on scroll
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.category-section');
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('href') === `#${current}`) {
+                item.classList.add('active');
+            }
+        });
+    });
+
+    // Prevent modal content from closing when clicking inside modal
+    document.querySelector('.modal-content').addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+</script>
+{% endblock content %}

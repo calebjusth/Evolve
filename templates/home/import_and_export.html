@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {# ---------- Dynamic Title ---------- #}
+    <title>
+        {% block title %}Evolve Business Group - Import Export{% endblock %}
+    </title>
+
+    {# ---------- Dynamic Meta Description ---------- #}
+    <meta name="description" content="{% block description %}Evolve Business Group is pioneering the future of construction, transportation, and industrial innovation across Ethiopia.{% endblock %}">
+
+    {# ---------- Dynamic Meta Keywords ---------- #}
+    <meta name="keywords" content="{% block meta_keywords %}Evolve, Construction, Industrial, Transportation, Ethiopia, Infrastructure{% endblock %}">
+
+    {# ---------- Open Graph / Twitter Meta ---------- #}
+    {% block meta_tags %}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Evolve Business Group">
+    <meta property="og:description" content="Evolve Business Group is pioneering the future of construction, transportation, and industrial innovation across Ethiopia.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.build_absolute_uri }}{% static 'images/logo/social-share.png' %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Evolve Business Group">
+    <meta name="twitter:description" content="Evolve Business Group is pioneering the future of construction, transportation, and industrial innovation across Ethiopia.">
+    <meta name="twitter:image" content="{{ request.build_absolute_uri }}{% static 'images/logo/social-share.png' %}">
+    {% endblock %}
+
+    {# ---------- Canonical URL ---------- #}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    {# ---------- Schema (Structured Data) ---------- #}
+    {% block schema %}{% endblock %}
+
+    {# ---------- Fonts & CSS ---------- #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"/>
+
+    <link rel="shortcut icon" href="{% static 'images/logo/fav2.png' %}" type="image/png">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animation.css' %}">
+    
+    <style>
+
+        /* Liquid Glass Navbar Styles */
+        .header {
+            position: fixed;
+            top: 40px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: transparent;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .header.scrolled {
+            top: 0;
+            background: rgba(1, 47, 47, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(168, 132, 78, 0.2);
+        }
+
+        /* Liquid Glass Effect for Navbar */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            position: relative;
+        }
+
+        /* Glass background with liquid effect */
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--deep-cyan-green);
+            backdrop-filter: blur(15px) saturate(200%);
+            -webkit-backdrop-filter: blur(15px) saturate(200%);
+            border-bottom: 1px solid rgba(168, 132, 78, 0.3);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        /* .header.scrolled::before {
+            opacity: 1;
+        } */
+
+        /* Enhanced Nav Styles with Glass Effect */
+        .nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            padding: 8px 20px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(168, 132, 78, 0.2);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--electric-green), transparent);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::before {
+            width: 100%;
+        }
+
+        .nav a:hover {
+            color: var(--electric-green);
+            transform: translateY(-1px);
+        }
+
+        /* Enhanced Button Styles */
+        .nav .btn-primary {
+            background: linear-gradient(135deg, var(--electric-green), #8a6b3b);
+            border: 1px solid rgba(168, 132, 78, 0.4);
+            box-shadow: 
+                0 4px 15px rgba(168, 132, 78, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            padding: 1px 10px;
+            color: white;
+        }
+
+        .nav .btn-primary:hover {
+            background: linear-gradient(135deg, #8a6b3b, var(--electric-green));
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 20px rgba(168, 132, 78, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* Mobile Menu Glass Effect */
+        @media (max-width: 768px) {
+            .header {
+                top: 35px;
+            }
+            
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 85%;
+                max-width: 320px;
+                height: 100vh;
+                background: rgba(1, 47, 47, 0.95);
+                backdrop-filter: blur(25px) saturate(180%);
+                -webkit-backdrop-filter: blur(25px) saturate(180%);
+                border-left: 1px solid rgba(168, 132, 78, 0.3);
+                border-radius: 0;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                padding: 120px 30px 30px;
+                gap: 0;
+                box-shadow: 
+                    -8px 0 32px rgba(0, 0, 0, 0.3),
+                    inset 1px 0 0 rgba(255, 255, 255, 0.1);
+                transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav a {
+                font-size: 18px;
+                padding: 16px 0;
+                width: 100%;
+                border-bottom: 1px solid rgba(168, 132, 78, 0.1);
+                opacity: 0;
+                transform: translateX(20px);
+                animation: slideInRight 0.4s ease forwards;
+            }
+
+            .nav a:nth-child(1) { animation-delay: 0.1s; }
+            .nav a:nth-child(2) { animation-delay: 0.15s; }
+            .nav a:nth-child(3) { animation-delay: 0.2s; }
+            .nav a:nth-child(4) { animation-delay: 0.25s; }
+            .nav a:nth-child(5) { animation-delay: 0.3s; }
+            .nav a:nth-child(6) { animation-delay: 0.35s; }
+
+            @keyframes slideInRight {
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .nav .btn-primary {
+                margin-top: 20px;
+                width: 100%;
+                text-align: center;
+                background: linear-gradient(135deg, var(--electric-green), #8a6b3b);
+                border: 1px solid rgba(168, 132, 78, 0.4);
+                box-shadow: 
+                    0 4px 15px rgba(168, 132, 78, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            }
+
+            .mobile-menu-btn {
+                background: rgba(168, 132, 78, 0.1);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(168, 132, 78, 0.2);
+                border-radius: 8px;
+                padding: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-menu-btn:hover {
+                background: rgba(168, 132, 78, 0.2);
+            }
+            
+            /* Ensure nav links are visible when active */
+            .nav.active a {
+                opacity: 1 !important;
+                visibility: visible !important;
+                display: block !important;
+            }
+            
+            /* Make sure the nav container is visible */
+            .nav.active {
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            /* Specific fix for button in mobile menu */
+            .nav.active .btn-primary {
+                background: var(--electric-green);
+                color: var(--white);
+                text-align: center;
+                border: 2px solid var(--electric-green);
+                margin-top: 10px;
+            }
+        }
+
+        /* Enhanced Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Logo Enhancement */
+        .logo-text {
+            transition: all 0.3s ease;
+        }
+        /* delete this later */
+        /* .header.scrolled .logo-text {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        } */
+
+        /* Smooth transitions for all interactive elements */
+        .nav a,
+        .btn-primary,
+        .mobile-menu-btn {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Enhanced scroll behavior */
+        .header {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* News Ticker */
+        .news-ticker {
+            color: var(--off-white);
+            padding: 8px 0;
+            overflow: hidden;
+            position: fixed;
+            font-size: 14px;
+            top: 0; 
+            left: 0;
+            right: 0;
+            z-index: 1001; 
+        }
+
+        .news-ticker-content {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+        }
+
+        .news-ticker:hover .news-ticker-content {
+            animation-play-state: paused;
+        }
+
+        .news-label {
+            background: var(--electric-green);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .news-ticker-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 40px;
+        }
+
+        .news-ticker-item:not(:last-child)::after {
+            content: "•";
+            margin-left: 40px;
+            color: var(--electric-green);
+            font-size: 18px;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 30px;
+            height: 24px;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 100%;
+            height: 3px;
+            background-color: var(--electric-green);
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #011817;
+            color: var(--off-white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: var(--electric-green);
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: var(--off-white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--electric-green);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+
+        /* Mobile Menu Icon Styling */
+.mobile-menu-btn {
+    display: none;
+    background: rgba(168, 132, 78, 0.1);
+    border: 1px solid rgba(168, 132, 78, 0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1002;
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(168, 132, 78, 0.25);
+}
+
+.mobile-menu-btn i {
+    font-size: 22px;
+    color: var(--electric-green);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Default: show hamburger icon */
+.mobile-menu-btn .open-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+/* Hidden by default */
+.mobile-menu-btn .close-icon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+}
+
+/* When active, swap icons */
+.mobile-menu-btn.active .open-icon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.6);
+}
+
+.mobile-menu-btn.active .close-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+/* Only visible on mobile */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(168, 132, 78, 0.15); /* slightly solid */
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- News Ticker -->
+    {% if website_info and website_info.news %}
+    <div class="news-ticker">
+        <div class="news-ticker-content">
+            <span class="news-label">News</span>
+            <div class="news-ticker-item">{{ website_info.news }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                   <a href="/"> <img src="{% static "images/logo/logo-white.png" %}" height='50'  class="logo-text" /> </a>
+                </div>
+                <nav class="nav" id="nav">
+                    <a href="{% url "industrial" %}">Industrial</a>
+                    <a href="{% url "construction" %}">Construction</a>
+                    <a href="{% url 'import_and_export' %}">Import & Export</a>
+                    <a href="{% url "transport" %}">Transport</a>
+                    <a href="#about">About</a>
+                    <a href="#contact" class="btn-primary">Contact Us</a>
+                </nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fa-solid fa-bars open-icon"></i>
+                    <i class="fa-solid fa-xmark close-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <link rel="stylesheet" href="{% static 'css/import_export.css' %}">
+   <body> 
+    <!-- Add this style block to fix navbar issues -->
+    <style>
+        /* Fix for navbar z-index and positioning issues */
+        .header {
+            z-index: 1000 !important;
+        }
+        
+        /* Ensure content starts below the fixed header */
+        .hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        /* Fix for mobile menu button visibility */
+        .mobile-menu-btn {
+            z-index: 1002 !important;
+        }
+        
+        /* Ensure nav is above other content */
+        .nav {
+            z-index: 1001 !important;
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                margin-top: 100px;
+                min-height: 70vh;
+            }
+        }
+    </style>
+        
+    <!-- Hero Section -->
+    <section
+    {% if hero_media and hero_media.import_export_background_image %}
+    style="background: url('{{ hero_media.import_export_background_image.url }}') center/cover;"
+    {% else %}
+                style="background: url('{% static 'images/importexport.jpg' %}') center/cover;"
+    {% endif %} 
+    class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Connecting Ethiopia's Rich Resources to the World</h1>
+            <p>Delivering quality, trust, and efficiency in global import & export</p>
+            <a href="#products" class="cta-button1">Explore Our Trade Solutions</a>
+        </div>
+    </section>
+
+        <!-- Products Section -->
+<section class="products" id="products">
+    <h2 class="section-title">Our Product Categories</h2>
+    <div class="products-grid">
+        {% for category in categories %}
+        <div class="product-card fade-in-on-scroll">
+            <div class="product-image" 
+                 style="background: url('{{ category.image.url }}') center/cover;">
+            </div>
+            <div class="product-content">
+                <h3>{{ category.title }}</h3>
+                <p>{{ category.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <h2>Our Mission</h2>
+            <p>To build strong foundations, innovate for progress, and bridge markets by connecting local potential with global opportunities.</p>
+            <p>With years of expertise in global logistics and trade, we ensure every shipment meets the highest standards of quality and reliability. Our commitment to excellence drives every transaction.</p>
+        </div>
+        <div class="about-image" >
+                
+
+                
+            </div>
+    </section>
+
+
+    <!-- Global Reach Section -->
+    <section class="global-reach" id="reach">
+        <div class="global-reach-content">
+            <h2>Our Global Reach</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem;">Connecting continents through trusted trade partnerships</p>
+            <div class="regions">
+                <div class="region">
+                    <div class="region-icon"><i class="fa-solid fa-earth-africa"></i></div>
+                    <div class="region-name">Africa</div>
+                </div>
+                <div class="region">
+                    <div class="region-icon"><i class="fa-solid fa-earth-asia"></i></div>
+                    <div class="region-name">Asia</div>
+                </div>
+                <div class="region">
+                    <div class="region-icon"><i class="fa-solid fa-earth-europe"></i></div>
+                    <div class="region-name">Europe</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <h2>Partner with Evolve</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #666;">Your trusted gateway for Ethiopian exports and global trade solutions</p>
+        <div class="cta-buttons">
+             {% if website_info %}
+            <a href="mailto:{{website_info.email}}" class="cta-button" style="color:white;">Contact Us</a>
+           
+            <a href="tel:{{website_info.phone}}" class="cta-button outline" style="color:black;">Call Us Now</a>
+            {% endif %}
+        </div>
+    </section>
+
+
+    <script>
+        // Enhanced navbar scroll functionality
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            const hero = document.querySelector('.hero');
+            const scrollPosition = window.scrollY;
+            
+            // Header scroll effect
+            if (header) {
+                const scrolled = scrollPosition > 100;
+                if (scrolled) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+            
+            // Parallax effect for hero
+            if (hero) {
+                hero.style.backgroundPosition = `center ${scrollPosition * 0.5}px`;
+            }
+        });
+
+        // Fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Hover glow effect on buttons
+        document.querySelectorAll('.cta-button1').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
+        });
+
+        // Animated region cards
+        document.querySelectorAll('.region').forEach((region, index) => {
+            region.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s forwards`;
+            region.style.opacity = '0';
+        });
+
+        // Ensure mobile menu works properly
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const nav = document.getElementById('nav');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            
+            if (mobileMenuBtn && nav) {
+                // Re-add event listeners to ensure they work
+                mobileMenuBtn.addEventListener('click', () => {
+                    nav.classList.toggle('active');
+                    mobileMenuBtn.classList.toggle('active');
+                    if (mobileMenuOverlay) {
+                        mobileMenuOverlay.classList.toggle('active');
+                    }
+                    document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+                });
+            }
+            
+            // Close mobile menu when clicking on nav links
+            document.querySelectorAll('.nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (nav) nav.classList.remove('active');
+                    if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+                    if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        });
+    </script>
+
+<footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="{% static "images/logo/LOGO-V-Secondary.png" %}" class="footer-logo"  height='95'/>
+                    <p>Building the future of business across multiple industries since 2019.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Industries</h4>
+                    <ul>
+                        <li><a href="{% url 'import_and_export' %}">Import & Export</a></li>
+                        <li><a href="{% url 'transport' %}">Transport</a></li>
+                        <li><a href="{% url 'construction' %}">Construction</a></li>
+                        <li><a href="{% url 'industrial' %}">Industrial</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="{% url 'job_list' %}">Careers</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#approach">Our Approach</a></li>
+                        <li><a href="#insights">Insights</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                {% for link in website_info.social_links.all %}
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="{{ link.url }}" target="_blank"> {{ link.get_platform_display }}</a></li>
+                         {% if website_info %}
+                        <li><a href="mailto:{{website_info.email}}">{{website_info.email}}</a></li>
+                        {%else%}
+                        {%endif%}
+                    </ul>
+                </div>
+                 {% endfor %}
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year"></span> Evolve Business Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.getElementById('nav');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const header = document.getElementById('header');
+
+        if (mobileMenuBtn && nav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                nav.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenuOverlay.classList.toggle('active');
+                document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+
+        // Close mobile menu when overlay is clicked
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Close mobile menu when clicking on nav links
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Enhanced Header scroll effect with glass morphism
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY > 100;
+            
+            if (scrolled) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add class to body when news ticker exists
+        if (document.querySelector('.news-ticker')) {
+            document.body.classList.add('news-ticker-present');
+        }
+
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Intersection Observer for Fade-in Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply fade-in animation to sections
+        document.querySelectorAll('.industry-card, .pillar-card, .insight-card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Counter Animation for Stats
+        const animateCounter = (element, target, duration = 2000) => {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            const updateCounter = () => {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            };
+            
+            updateCounter();
+        };
+
+        // Observe stats section for counter animation
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const text = stat.textContent;
+                        const number = parseInt(text.replace(/\D/g, ''));
+                        if (!isNaN(number)) {
+                            stat.textContent = '0';
+                            setTimeout(() => {
+                                animateCounter(stat, number);
+                                // Add back any non-numeric characters
+                                if (text.includes('+')) {
+                                    setTimeout(() => {
+                                        stat.textContent = stat.textContent + '+';
+                                    }, 2000);
+                                }
+                            }, 200);
+                        }
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        // Parallax Effect for Hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+            }
+        });
+    </script>
+
+</body>
+</html>

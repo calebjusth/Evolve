@@ -1,0 +1,100 @@
+<!-- templates/jobs/application_success.html -->
+{% extends '../base/base.html' %}
+
+{% block title %}Application Submitted - CareerPortal{% endblock %}
+
+{% block content %}
+<div class="success-page">
+    <div class="success-container">
+        <div class="success-icon">✓</div>
+        
+        <h1>Application Submitted Successfully!</h1>
+        
+        <div class="success-message">
+            <p>Thank you for applying for the <strong>{{ job.title }}</strong> position at <strong>{{ job.company }}</strong>.</p>
+            <p>Your application has been received and will be reviewed by our team.</p>
+            <p>We will contact you via email if your qualifications match our requirements.</p>
+        </div>
+        
+        <div class="success-actions">
+            <a href="{% url 'job_list' %}" class="btn btn-primary">Browse More Jobs</a>
+            <a href="{% url 'job_detail' job.pk %}" class="btn btn-secondary">View Job Again</a>
+        </div>
+        
+        <div class="success-note">
+            <p><small>Haven't received a confirmation email? Please check your spam folder or <a href="mailto:support@company.com">contact us</a>.</small></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .success-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        padding: 2rem 0;
+    }
+    
+    .success-container {
+        text-align: center;
+        background: #fff;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        max-width: 600px;
+        width: 100%;
+    }
+    
+    .success-icon {
+        font-size: 4rem;
+        color: #28a745;
+        margin-bottom: 1.5rem;
+    }
+    
+    .success-container h1 {
+        color: #333;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+    }
+    
+    .success-message {
+        margin-bottom: 2rem;
+        line-height: 1.7;
+        color: #555;
+    }
+    
+    .success-message p {
+        margin-bottom: 1rem;
+    }
+    
+    .success-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+    
+    .success-note {
+        border-top: 1px solid #eee;
+        padding-top: 1.5rem;
+        color: #666;
+    }
+    
+    @media (max-width: 768px) {
+        .success-container {
+            padding: 2rem 1.5rem;
+            margin: 0 1rem;
+        }
+        
+        .success-actions {
+            flex-direction: column;
+        }
+        
+        .success-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}

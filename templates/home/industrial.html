@@ -1,0 +1,83 @@
+
+{% extends "../base/base.html" %}
+{% load static %}
+
+{# ---------- Dynamic SEO Blocks ---------- #}
+{% block title %}industrial | Evolve Business Group{% endblock %}
+{% block description %}Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth.{% endblock %}
+{% block meta_keywords %}Evolve, Ethiopia, Construction, Transportation, Industrial, Import, Export, Infrastructure, Smart Cities, Logistics, Sustainable Growth{% endblock %}
+
+{% block meta_tags %}
+<meta property="og:type" content="website">
+<meta property="og:title" content="Industrial | Evolve Business Group">
+<meta property="og:description" content="Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{{ request.build_absolute_uri }}{% static 'images/logo/social-share.png' %}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Industrial | Evolve Business Group">
+<meta name="twitter:description" content="Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth.">
+<meta name="twitter:image" content="{{ request.build_absolute_uri }}{% static 'images/logo/social-share.png' %}">
+{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Evolve Business Group",
+  "url": "{{ request.build_absolute_uri }}",
+  "logo": "{{ request.build_absolute_uri }}{% static 'images/logo/LOGO-H-Secondary.png' %}",
+  "description": "Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth."
+}
+</script>
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/industrial.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animation.css' %}">
+
+    {% for industrial in industrial_page  %}
+<!-- Hero Section -->
+    <section class="hero" id="hero">
+    <div class="hero-background">
+        <img src="{{ industrial.hero_image.url }}" alt="{{ industrial.hero_title }}" class="hero-image">
+    </div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <div class="hero-title">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" class="hero-icon">
+                <text x="5" y="30" font-size="24" font-weight="bold" fill="white">{{ industrial.hero_icon_text }}</text>
+            </svg>
+            <h1>{{ industrial.hero_title }}</h1>
+        </div>
+    </div>
+
+    <!-- Specifications Cards -->
+    <div class="specs-container">
+        <div class="spec-card">
+            <div class="spec-value">{{ industrial.motor }}</div>
+            <div class="spec-label">Motor</div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-value">{{ industrial.top_speed }}</div>
+            <div class="spec-label">Top Speed</div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-value">{{ industrial.rangee|safe }}</div>
+            <div class="spec-label">Range</div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-value">{{ industrial.battery|safe }}</div>
+            <div class="spec-label">battery</div>
+        </div>
+    </div>
+</section>
+{% endfor %}
+
+
+
+
+    {% endblock %}

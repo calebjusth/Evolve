@@ -1,0 +1,1420 @@
+
+{% extends "../base/base.html" %}
+{% load static %}
+{% load cache %}
+
+
+{# ---------- Dynamic SEO Blocks ---------- #}
+{% block title %}Home | Evolve Business Group{% endblock %}
+{% block description %}Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth.{% endblock %}
+{% block meta_keywords %}Evolve, Ethiopia, Construction, Transportation, Industrial, Import, Export, Infrastructure, Smart Cities, Logistics, Sustainable Growth{% endblock %}
+
+{% block meta_tags %}
+<meta property="og:type" content="website">
+<meta property="og:title" content="Home | Evolve Business Group">
+<meta property="og:description" content="Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{{ request.build_absolute_uri }}{% static 'images/logo/social-share.png' %}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Home | Evolve Business Group">
+<meta name="twitter:description" content="Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth.">
+<meta name="twitter:image" content="{{ request.build_absolute_uri }}{% static 'images/logo/social-share.png' %}">
+{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Evolve Business Group",
+  "url": "{{ request.build_absolute_uri }}",
+  "logo": "{{ request.build_absolute_uri }}{% static 'images/logo/LOGO-H-Secondary.png' %}",
+  "description": "Evolve Business Group leads Ethiopia in construction, transportation, industrial solutions, and global trade. Discover innovative infrastructure, smart logistics, and sustainable growth."
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static "css/animation.css" %}">
+<style>
+      /* Cinematic Loader Styles */
+    .loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--deep-cyan-green);
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .loader-overlay.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .loader-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        padding: 0 40px;
+    }
+
+    /* Main Loader Bar */
+    .loader-bar {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        border-radius: 2px;
+    }
+
+    .loader-progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--electric-green), #00ff88);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+        box-shadow: 0 0 20px var(--electric-green);
+    }
+
+    /* Pulsing Glow Effect */
+    .loader-glow {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        background: var(--electric-green);
+        border-radius: 50%;
+        filter: blur(40px);
+        opacity: 0.3;
+        transform: translateY(-50%);
+        animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% { opacity: 0.2; transform: translateY(-50%) scale(0.8); }
+        50% { opacity: 0.4; transform: translateY(-50%) scale(1.2); }
+    }
+
+    /* Logo Animation */
+    .loader-logo {
+        margin-bottom: 60px;
+        opacity: 0;
+        transform: scale(0.8);
+        animation: logoReveal 1.5s ease-out 0.5s forwards;
+    }
+
+    @keyframes logoReveal {
+        0% { opacity: 0; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Percentage Counter */
+    .loader-counter {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: var(--white);
+        font-family: 'Orbitron', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        opacity: 0;
+        animation: counterFadeIn 0.5s ease 1s forwards;
+    }
+
+    @keyframes counterFadeIn {
+        to { opacity: 1; }
+    }
+
+    /* Scanning Line Effect */
+    .loader-scan {
+        position: absolute;
+        top: 0;
+        left: -100px;
+        width: 100px;
+        height: 100%;
+        background: linear-gradient(90deg, 
+            transparent, 
+            rgba(255, 255, 255, 0.8), 
+            transparent);
+        transform: skewX(-20deg);
+        animation: scanMove 2s ease-in-out infinite;
+    }
+
+    @keyframes scanMove {
+        0% { left: -100px; }
+        100% { left: calc(100% + 100px); }
+    }
+
+    /* Loading Text */
+    .loader-text {
+        color: var(--white);
+        font-family: 'Orbitron', sans-serif;
+        font-size: 12px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-top: 30px;
+        opacity: 0;
+        animation: textFadeIn 0.5s ease 1.5s forwards;
+        position: relative;
+    }
+
+    .loader-text::after {
+        content: '';
+        animation: loadingDots 1.5s infinite;
+    }
+
+    @keyframes loadingDots {
+        0%, 20% { content: ''; }
+        40% { content: '.'; }
+        60% { content: '..'; }
+        80%, 100% { content: '...'; }
+    }
+
+    @keyframes textFadeIn {
+        to { opacity: 0.7; }
+    }
+
+    /* Particle Effects */
+    .loader-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .loader-particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: var(--electric-green);
+        border-radius: 50%;
+        animation: particleFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes particleFloat {
+        0%, 100% { 
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+        10%, 90% { 
+            opacity: 1;
+        }
+        50% { 
+            transform: translateY(-20px) translateX(10px);
+        }
+    }
+
+    /* Grid Background */
+    .loader-grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(rgba(1, 177, 47, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(1, 177, 47, 0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.3;
+        animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px); }
+    }
+</style>
+    <!-- Cinematic Loader -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader-grid"></div>
+        <div class="loader-particles" id="loaderParticles"></div>
+        
+        <div class="loader-logo">
+            <img src="{% static 'images/logo/LOGO-V-Secondary.png' %}" height="60" alt="Evolve Business Group">
+        </div>
+        
+        <div class="loader-container">
+            <div class="loader-counter" id="loaderCounter">0%</div>
+            
+            <div class="loader-bar">
+                <div class="loader-progress" id="loaderProgress"></div>
+                <div class="loader-scan"></div>
+                <div class="loader-glow"></div>
+            </div>
+            
+            <div class="loader-text">Initializing Systems</div>
+        </div>
+    </div>
+    
+    <section class="hero" id="hero">
+      {% if hero_media %}
+        <div class="hero-video">
+          {% if hero_media.landing_background_video %}
+            <video autoplay muted playsinline class="parallax-video">
+              
+                <source src="{{ hero_media.landing_background_video.url }}" type="video/mp4">
+                <!-- Fallback image if video doesn't load -->
+              {% elif hero_media.landing_background_image %}
+                <img src="{{ hero_media.landing_background_image.url }}" alt="Background" style="width:100%;">
+              {% endif %}
+            </video>
+        </div>
+        {% endif %}
+        <div class="hero-overlay"></div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>
+                        <span class="word">We Build</span>
+                        <span class="word">We Innovate</span>
+                        <span class="word">We Bridge</span>
+                    </h1>
+                    <p>A diversified holding company driving progress across import & export, transport, construction, and industrial sectors since 2019.</p>
+                    <div class="hero-buttons">
+                        <a href="#industries" class="btn-primary">Explore Our Industries</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+    
+
+{% cache 3600 clients_section %}
+<div class="logo-scroll-section">
+    <div class="logo-scroll-container">
+        <div class="logo-scroll-track">
+            {% for client in clients %}
+                {% if client.logo and client.active %}
+                <img src="{{ client.logo.url }}" alt="{{ client.name }} Logo" class="logo-item" height="50">
+                {% endif %}
+            {% endfor %}
+            <!-- Duplicate for seamless loop -->
+            {% for client in clients %}
+                {% if client.logo and client.active %}
+                <img src="{{ client.logo.url }}" alt="{{ client.name }} Logo" class="logo-item" height="50">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endcache %}
+
+    <section class="stats">
+        <div class="container">
+            <div style="margin: 1.5em; font-weight:800; font-size:30px;">
+                <h4>
+                    Evolve is building the foundation for the <br>future of transportation.
+                </h4>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">2019</div>
+                    <div class="stat-label">Established</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Core Industries</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1+</div>
+                    <div class="stat-label">Billion ETB completed projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Transport Vessels</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="industries" id="industries">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Industries</h2>
+                <p>Strategic businesses driving growth across multiple sectors</p>
+            </div>
+            <div class="industries-grid">
+              <a href="{% url "import_and_export" %}">
+                <div class="industry-card">
+                    <div class="industry-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3>Import & Export</h3>
+                    <p>Bridging global markets with efficient trade solutions and logistics management.</p>
+                </div>
+              </a>
+
+
+              <a href="{% url "transport" %}">
+                <div class="industry-card">
+                    <div class="industry-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13"></rect>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                        </svg>
+                    </div>
+                    <h3>Transport</h3>
+                    <p>Reliable transportation and logistics services ensuring seamless delivery worldwide.</p>
+                </div>
+
+              </a>
+
+              <a href="{% url "construction" %}">
+                <div class="industry-card">
+                    <div class="industry-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Construction</h3>
+                    <p>Building infrastructure that lays strong foundations for communities and businesses.</p>
+                </div>
+
+              </a>
+
+              <a href="{% url 'industrial' %}">
+                <div class="industry-card">
+                    <div class="industry-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <h3>Industrial</h3>
+                    <p>Advanced industrial solutions powering efficiency and sustainable growth.</p>
+                </div>
+              </a>
+            </div>
+        </div>
+    </section>
+<section class="hero-section refined-ondo">
+  <div class="background-container" aria-hidden="true"></div>
+  <div class="background-overlay" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="hero-content">
+
+      <!-- Left: Purpose Panel -->
+      <aside class="feature-panel" aria-label="Evolve Mission Statement">
+        <div class="panel-icon" aria-hidden="true">
+          <i class="fas fa-building-columns"></i>
+        </div>
+
+        <div class="panel-body">
+          <h1>To Build, Innovate, and Bridge Markets</h1>
+          <h2>Connecting Local Potential with Global Opportunities</h2>
+          <p>
+            We build strong foundations for progress, drive innovation across industries, 
+            and bridge markets to transform opportunities into lasting growth.
+          </p>
+
+          <hr />
+
+          <div class="panel-partner">
+            <strong>Our Purpose</strong>
+            <p>To Build, Innovate, and Bridge Markets</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right: Values Cards -->
+      <div class="cards-wrap" role="list" aria-label="Core Company Values">
+        <div class="cards-container">
+          
+          <div class="card active" data-index="0" role="button" tabindex="0" aria-pressed="true">
+            <div class="card-inner">
+              <div class="card-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="card-content">
+                <div class="card-title">Collaboration</div>
+                <div class="card-desc">Working together to create value, foster partnerships, and share success.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" data-index="1" role="button" tabindex="0" aria-pressed="false">
+            <div class="card-inner">
+              <div class="card-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="card-content">
+                <div class="card-title">Trustworthiness</div>
+                <div class="card-desc">Built on integrity, consistency, and genuine commitment to every stakeholder.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" data-index="2" role="button" tabindex="0" aria-pressed="false">
+            <div class="card-inner">
+              <div class="card-icon">
+                <i class="fas fa-scale-balanced"></i>
+              </div>
+              <div class="card-content">
+                <div class="card-title">Honor & Accountability</div>
+                <div class="card-desc">We take pride in our word, our work, and the responsibility we carry forward.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" data-index="3" role="button" tabindex="0" aria-pressed="false">
+            <div class="card-inner">
+              <div class="card-icon">
+                <i class="fas fa-award"></i>
+              </div>
+              <div class="card-content">
+                <div class="card-title">Excellence</div>
+                <div class="card-desc">Driven to exceed expectations, innovate constantly, and deliver lasting impact.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<style>
+:root {
+  --hero-bg: url("{% static 'images/portfolio.jpg' %}");
+  --panel-white: #ffffff;
+  --glass-bg: rgba(255,255,255,0.08);
+  --glass-border: rgba(255,255,255,0.14);
+  --black-90: rgba(0,0,0,0.9);
+  --white-90: rgba(255,255,255,0.95);
+  --transition-smooth: all 0.45s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+/* SECTION LAYOUT */
+.hero-section.refined-ondo {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  overflow: hidden;
+  padding: 80px 0;
+}
+
+/* Background with fixed positioning */
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: -3;
+  transform: scale(1.02);
+  will-change: transform;
+}
+
+/* Dark gradient overlay */
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(110deg, rgba(6,10,13,0.82) 0%, rgba(6,10,13,0.62) 45%, rgba(6,10,13,0.38) 100%);
+  z-index: -2;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: border-box;
+}
+
+/* Main layout: left panel + right cards */
+.hero-content {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+/* LEFT big rounded white panel */
+.feature-panel {
+  background: var(--panel-white);
+  color: var(--black-90);
+  width: min(720px, 65%);
+  border-radius: 36px;
+  padding: 40px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  transform-origin: left center;
+  z-index: 5;
+  transition: var(--transition-smooth);
+}
+
+/* Small icon in top-left of panel */
+.panel-icon {
+  flex: 0 0 44px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  color: var(--electric-green);
+  margin-top: 4px;
+  font-size: 24px;
+}
+
+/* Panel content */
+.panel-body h1 {
+  font-family: 'Orbitron', 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(36px, 6.2vw, 64px);
+  margin: 0;
+  line-height: 0.95;
+  color: var(--black-90);
+  letter-spacing: -0.02em;
+}
+
+.panel-body h1 span {
+  display: block;
+  font-weight: 900;
+}
+
+.panel-body h2 {
+  margin-top: 14px;
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.7);
+}
+
+.panel-body p {
+  margin: 0 0 22px;
+  color: rgba(0,0,0,0.68);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Horizontal rule */
+.feature-panel hr {
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  margin: 18px 0;
+}
+
+/* Partner */
+.panel-partner strong {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--black-90);
+}
+
+/* CARDS (bottom-right) container */
+.cards-wrap {
+  position: absolute;
+  right: 28px;
+  bottom: 24px;
+  z-index: 7;
+  pointer-events: auto;
+}
+
+/* Horizontal card row */
+.cards-container {
+  display: flex;
+  gap: 18px;
+  align-items: flex-end;
+  padding-left: 8px;
+}
+
+/* Single card base (glass look) */
+.card {
+  width: 60px;
+  min-width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  padding: 0;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px) saturate(110%);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(2,6,12,0.25);
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Card inner layout */
+.card-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Icon - centered in collapsed state */
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
+  transition: var(--transition-smooth);
+}
+
+/* Card content (title and description) */
+.card-content {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+  width: 100%;
+}
+
+/* Title & description */
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--black-90);
+  margin: 0;
+}
+
+.card-desc {
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: rgba(0,0,0,0.85);
+  margin: 0;
+}
+
+/* ACTIVE card style (expanded) */
+.card.active {
+  width: 260px;
+  height: 180px;
+  background: var(--panel-white);
+  color: var(--black-90);
+  transform: translateY(-6px);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 18px 0;
+  align-items: flex-start;
+}
+
+.card.active .card-inner {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.card.active .card-icon {
+  width: auto;
+  height: auto;
+  color: var(--black-90);
+  font-size: 24px;
+  padding: 0 16px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.card.active .card-content {
+  display: flex;
+}
+
+/* Small hover micro effect */
+.card:not(.active):hover {
+  transform: translateY(-4px) scale(1.03);
+  background: rgba(255,255,255,0.12);
+}
+
+/* Keyboard focus */
+.card:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(15,191,139,0.12);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1100px) {
+  .feature-panel {
+    width: 60%;
+    padding: 34px;
+    border-radius: 28px;
+  }
+
+  .cards-wrap {
+    right: 18px;
+    bottom: 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 34px;
+  }
+
+  .feature-panel {
+    width: 100%;
+    max-width: 900px;
+    border-radius: 26px;
+    padding: 28px;
+  }
+
+  .cards-wrap {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    margin-top: -26px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cards-container {
+    gap: 12px;
+    padding: 10px;
+  }
+}
+
+/* Mobile: Cards with text visible when active */
+@media (max-width: 768px) {
+  .hero-section.refined-ondo {
+    min-height: auto;
+    padding: 60px 0;
+  }
+  
+  .feature-panel {
+    padding: 24px;
+    border-radius: 20px;
+    gap: 18px;
+  }
+  
+  .panel-icon {
+    flex: 0 0 36px;
+    font-size: 20px;
+  }
+  
+  .cards-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .card {
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    border-radius: 14px;
+  }
+  
+  .card.active {
+    width: 200px;
+    height: 140px;
+  }
+  
+  .card-icon {
+    font-size: 18px;
+  }
+  
+  .card.active .card-icon {
+    font-size: 22px;
+  }
+  
+  .card-title {
+    font-size: 0.9rem;
+  }
+  
+  .card-desc {
+    font-size: 0.75rem;
+  }
+}
+
+/* Small mobile: Stack cards vertically */
+@media (max-width: 540px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .feature-panel {
+    padding: 20px;
+    border-radius: 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .panel-icon {
+    align-self: flex-start;
+  }
+  
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .card {
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+  
+  .card.active {
+    width: 100%;
+    max-width: 280px;
+    height: 120px;
+  }
+  
+  .card-title {
+    font-size: 0.85rem;
+  }
+  
+  .card-desc {
+    font-size: 0.75rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 380px) {
+  .feature-panel {
+    padding: 16px;
+  }
+  
+  .panel-body h1 {
+    font-size: 28px;
+  }
+  
+  .panel-body h2 {
+    font-size: 16px;
+  }
+  
+  .panel-body p {
+    font-size: 14px;
+  }
+  
+  .card.active {
+    width: 100%;
+    max-width: 250px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = Array.from(document.querySelectorAll('.card'));
+  let current = 0;
+  let intervalMs = 3500;
+  let timer;
+
+  // Activate a card (index)
+  function activate(index, userTriggered = false) {
+    cards.forEach((c, i) => {
+      c.classList.toggle('active', i === index);
+      c.setAttribute('aria-pressed', i === index ? 'true' : 'false');
+    });
+    current = index;
+    if (userTriggered) resetTimer();
+  }
+
+  // Auto-cycle
+  function startTimer() {
+    timer = setInterval(() => {
+      current = (current + 1) % cards.length;
+      activate(current);
+    }, intervalMs);
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    startTimer();
+  }
+
+  // Click & keyboard support
+  cards.forEach((card, idx) => {
+    card.addEventListener('click', () => activate(idx, true));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate(idx, true);
+      }
+    });
+  });
+
+  // Start initial state & timer
+  activate(0);
+  startTimer();
+
+  // Handle background positioning for mobile
+  function handleBackground() {
+    const bg = document.querySelector('.background-container');
+    if (window.innerWidth <= 768) {
+      bg.style.position = 'absolute';
+      bg.style.height = '100%';
+    } else {
+      bg.style.position = 'fixed';
+      bg.style.height = '100vh';
+    }
+  }
+
+  // Initial call and resize listener
+  handleBackground();
+  window.addEventListener('resize', handleBackground);
+});
+</script>
+
+
+
+
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Evolve Business Group</h2>
+                    <p class="lead">Established in 2019, Evolve Business Group is a diversified holding company dedicated to driving progress across multiple industries.</p>
+                    <p>Since its inception, the Group has steadily expanded its portfolio, bringing together strategic businesses in import and export, Transport, construction, and industrial.</p>
+                   
+                    <a href="#contact" class="btn-primary">Partner With Us</a>
+                </div>
+                <div class="about-image">
+                    <img src="{% static 'images/logo/LOGO-V-Secondary.png' %}" alt="Evolve Business Group">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+{% cache 3600 featured_portfolio_items %}
+<section id="portfolio-section" class="portfolio-section">
+    <!-- Vignette effect -->
+    <div class="vignette-overlay">
+        <div class="vignette-gradient"></div>
+    </div>
+
+    <!-- Ambient glow effect -->
+    <div class="ambient-glow">
+        <div class="glow-gradient"></div>
+    </div>
+
+    <div class="content-container">
+        <!-- Title -->
+        <h2 id="portfolio-title" class="portfolio-title">Portfolio</h2>
+
+        <!-- Portfolio Grid -->
+        <div class="portfolio-grid">
+            {% for item in featured_portfolio_items %}
+            <div class="portfolio-card" data-index="{{ forloop.counter0 }}">
+                {% if item.primary_image %}
+                    <img 
+                        src="{{ item.primary_image.url }}" 
+                        alt="{{ item.title }}"
+                        class="card-image"
+                    >
+                {% else %}
+                    <img 
+                        src="{% static 'images/placeholder.jpg' %}" 
+                        alt="{{ item.title }}"
+                        class="card-image"
+                    >
+                {% endif %}
+                <div class="card-overlay">
+                    <h3 class="card-title">{{ item.title }}</h3>
+                    <p class="card-tagline">{{ item.short_description|default:item.description|truncatewords:10 }}</p>
+                    <span class="project-type-badge">{{ item.get_project_type_display }}</span>
+                    <button class="card-button" onclick="openPortfolioModal(
+                        '{{ item.title|escapejs }}',
+                        '{{ item.description|escapejs }}',
+                        '{% if item.primary_image %}{{ item.primary_image.url }}{% else %}{% static "images/placeholder.jpg" %}{% endif %}',
+                        '{{ item.client_name|escapejs }}',
+                        '{{ item.location|escapejs }}',
+                        '{{ item.project_date|date:"F Y" }}',
+                        '{{ item.get_status_display }}'
+                    )">View Project →</button>
+                </div>
+                <div class="card-border"></div>
+            </div>
+            {% empty %}
+            <div class="no-portfolio-items">
+                <p>No portfolio items available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- CTA Bar -->
+        <div id="cta-bar" class="cta-bar">
+            <a class="cta-button" href="{% url 'portfolio' %}">Explore more of our work →</a>
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Modal -->
+<div class="portfolio-modal" id="portfolioModal" style="display: none;">
+    <div class="portfolio-modal-backdrop" onclick="closePortfolioModal()"></div>
+    <div class="portfolio-modal-container">
+        <div class="portfolio-modal-content">
+            <button class="portfolio-close-btn" onclick="closePortfolioModal()">&times;</button>
+            <div class="portfolio-modal-image">
+                <img id="portfolioModalImage" src="" alt="Project Image">
+            </div>
+            <div class="portfolio-modal-text">
+                <h3 id="portfolioModalTitle"></h3>
+                <div class="portfolio-modal-meta">
+                    <span id="portfolioModalClient"></span>
+                    <span id="portfolioModalLocation"></span>
+                    <span id="portfolioModalDate"></span>
+                    <span id="portfolioModalStatus"></span>
+                </div>
+                <p id="portfolioModalDescription"></p>
+                <div class="portfolio-modal-actions">
+                    <button class="demo-btn" onclick="closePortfolioModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openPortfolioModal(title, description, imageUrl, client, location, date, status) {
+    const modal = document.getElementById('portfolioModal');
+    const modalTitle = document.getElementById('portfolioModalTitle');
+    const modalDescription = document.getElementById('portfolioModalDescription');
+    const modalImage = document.getElementById('portfolioModalImage');
+    const modalClient = document.getElementById('portfolioModalClient');
+    const modalLocation = document.getElementById('portfolioModalLocation');
+    const modalDate = document.getElementById('portfolioModalDate');
+    const modalStatus = document.getElementById('portfolioModalStatus');
+    
+    // Set content
+    modalTitle.textContent = title;
+    modalDescription.textContent = description;
+    modalImage.src = imageUrl;
+    modalImage.alt = title;
+    
+    // Set meta information
+    modalClient.textContent = client ? `Client: ${client}` : '';
+    modalClient.style.display = client ? 'block' : 'none';
+    
+    modalLocation.textContent = location ? `Location: ${location}` : '';
+    modalLocation.style.display = location ? 'block' : 'none';
+    
+    modalDate.textContent = date ? `Date: ${date}` : '';
+    modalDate.style.display = date ? 'block' : 'none';
+    
+    modalStatus.textContent = status ? `Status: ${status}` : '';
+    modalStatus.style.display = status ? 'block' : 'none';
+    
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    console.log('Modal opened'); // Debug log
+}
+
+function closePortfolioModal() {
+    const modal = document.getElementById('portfolioModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    console.log('Modal closed'); // Debug log
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closePortfolioModal();
+    }
+});
+
+// Close modal when clicking outside (on backdrop)
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('portfolioModal');
+    if (e.target.classList.contains('portfolio-modal-backdrop')) {
+        closePortfolioModal();
+    }
+});
+
+// Prevent modal content clicks from closing the modal
+document.querySelector('.portfolio-modal-content').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+</script>
+{% endcache %}
+
+
+{% cache 1800 testimonials_section %}
+<section class="testimonial-carousel">
+      <div class="carousel-container">
+        <button class="nav-arrow nav-arrow-left" aria-label="Previous">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+
+        <div class="carousel-wrapper">
+          <div class="carousel-track">
+            {% for testimonial in testimonials %}
+            <div class="testimonial-card">
+              <div class="card-logo">
+                {% if testimonial.client.logo %}
+                  <img src="{{ testimonial.client.logo.url }}" alt="{{ testimonial.client.name }}" height="55" class="client-logo">
+                {% else %}
+                  <h3>{{ testimonial.client.name }}</h3>
+                {% endif %}
+              </div>
+              <div class="card-content">
+                <p>"{{ testimonial.quote }}"</p>
+              </div>
+              <div class="card-footer">
+                <p class="person-name">{{ testimonial.author_name }}</p>
+                <p class="person-title">
+                  {% if testimonial.position %}{{ testimonial.position }}, {% endif %}{{ testimonial.client.name }}
+                </p>
+              </div>
+            </div>
+            {% empty %}
+            <div class="no-testimonials">
+              <p>No testimonials available at the moment.</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <button class="nav-arrow nav-arrow-right" aria-label="Next">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+</section>
+{% endcache %}
+
+
+
+
+{% cache 3600 latest_posts_section %}
+<section class="insights" id="insights">
+    <div class="container">
+        <div class="section-header">
+            <h2>Latest Insights</h2>
+            <p>Stay informed with our latest news and industry perspectives</p>
+        </div>
+        <div class="insights-grid">
+            {% for post in latest_posts %}
+                <article class="insight-card">
+                    <div class="insight-image">
+                        {% if post.featured_image %}
+                            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                        {% else %}
+                            <img src="{% static 'images/placeholder.svg' %}" alt="Placeholder">
+                        {% endif %}
+                    </div>
+                    <div class="insight-content">
+                        {% if post.category %}
+                            <span class="insight-category">{{ post.category.name }}</span>
+                        {% endif %}
+                        <h3>{{ post.title }}</h3>
+                        <p>
+                            {% if post.excerpt %}
+                                {{ post.excerpt }}
+                            {% else %}
+                                {{ post.content|truncatewords:20|safe }}
+                            {% endif %}
+                        </p>
+                        <a href="{{ post.get_absolute_url }}" class="insight-link">Read More →</a>
+                    </div>
+                </article>
+            {% empty %}
+                <p>No insights available at the moment. Check back soon!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endcache %}
+
+
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Contact Us</h2>
+            
+            <!-- Contact Form -->
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary-large">Send Message</button>
+            </form>
+        </div>
+
+
+        <div class="contact-map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509569!2d144.95373531584453!3d-37.81627944202138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43e5b1e7f3%3A0x5045675218ce6e0!2sBusiness%20District!5e0!3m2!1sen!2set!4v1696867545209!5m2!1sen!2set"
+                    width="100%"
+                    height="450"
+                    style="border:0; border-radius: 12px;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+    </div>
+</section>
+
+<!-- Success Popup Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-body">
+            <div class="success-icon">✓</div>
+            <h3>Message Sent Successfully!</h3>
+            <p>Thank you for contacting us. We'll get back to you soon.</p>
+            <button class="btn-primary-large" id="modalCloseBtn">OK</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    const successModal = document.getElementById('successModal');
+    const closeBtn = document.querySelector('.close');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    
+    // Form submission handler
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<div class="button-loader"></div>Sending...';
+        
+        // Get form data
+        const formData = new FormData(contactForm);
+        
+        // Send data to Django backend
+        fetch('/contact/', {  // Update this URL to match your Django URL pattern
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                showSuccessModal();
+                contactForm.reset();
+            } else {
+                alert(result.error || 'There was an error sending your message. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error sending your message. Please try again.');
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+        });
+    });
+    
+    // Get CSRF token for Django
+    function getCSRFToken() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+        return cookieValue;
+    }
+    
+    // Show success modal
+    function showSuccessModal() {
+        successModal.style.display = 'block';
+    }
+    
+    // Close modal when clicking X
+    closeBtn.addEventListener('click', function() {
+        successModal.style.display = 'none';
+    });
+    
+    // Close modal when clicking OK button
+    modalCloseBtn.addEventListener('click', function() {
+        successModal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside the modal
+    window.addEventListener('click', function(e) {
+        if (e.target === successModal) {
+            successModal.style.display = 'none';
+        }
+    });
+});
+</script>
+
+
+    <script src="{% static 'js/scripts.js' %}"></script>
+{% endblock content %}
+
+

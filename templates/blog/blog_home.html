@@ -1,0 +1,554 @@
+{% extends '../base/base.html' %}
+{% load static %}
+{% block title %}Blog | Evolve  {% endblock %}
+{% block meta_description %}{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+<link rel="stylesheet" href="{% static 'css/animation.css' %}">
+<!-- Blog Hero Section -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="blog-hero-content" style="margin-top:130px">
+            <h1 class="blog-title">Evolve Insights</h1>
+            <p class="blog-subtitle">Expert knowledge on construction, transportation, Industrial and Import and Export trends</p>
+            <div class="hero-search">
+                <form id="searchForm" method="GET" action="{% url 'blog:blog' %}">
+                    <input type="text" name="q" placeholder="Search articles..." class="search-input" value="{{ request.GET.q }}">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                <div id="searchSuggestions" class="search-suggestions"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Layout -->
+<section class="blog-layout">
+    <div class="container">
+        <div class="blog-grid">
+            <!-- Main Content -->
+            <main class="blog-main">
+                <!-- Search Results Info -->
+                {% if request.GET.q %}
+                <div class="search-results-info" data-scroll>
+                    <h3>Search Results for "{{ request.GET.q }}"</h3>
+                    <p>{{ posts.paginator.count }} article{{ posts.paginator.count|pluralize }} found</p>
+                    <a href="{% url 'blog:blog' %}" class="clear-search">Clear search</a>
+                </div>
+                {% endif %}
+
+                <div class="posts-grid">
+                    {% for post in posts %}
+                    <article class="post-card" data-scroll data-searchable data-title="{{ post.title|lower }}" data-content="{{ post.content|striptags|lower }}" data-category="{{ post.category.name|lower }}" data-tags="{% for tag in post.tags.all %}{{ tag.name|lower }} {% endfor %}">
+                        <div class="post-image">
+                            <img src="{{ post.featured_image.url|default:'https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }}" alt="{{ post.title }}">
+                            <div class="post-category">{{ post.category.name}}</div>
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-date">{{ post.publish_date|date:"M d, Y" }}</span>
+                                <span class="post-author">By {{ post.author }}</span>
+                                <span class="post-views">{{ post.views }} views</span>
+                            </div>
+                            <h2 class="post-title">
+                                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                            </h2>
+                            <p class="post-excerpt">{{ post.excerpt|default:post.content|striptags|truncatewords:30 }}</p>
+                            <div class="post-footer">
+                                <a href="{{ post.get_absolute_url }}" class="read-more">
+                                    Read More <i class="fas fa-arrow-right"></i>
+                                </a>
+                                <div class="post-tags">
+                                    {% for tag in post.tags.all|slice:":3" %}
+                                    <span class="tag">#{{ tag.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <div class="no-posts" data-scroll>
+                        {% if request.GET.q %}
+                        <h3>No results found for "{{ request.GET.q }}"</h3>
+                        <p>Try different keywords or <a href="{% url 'blog:blog' %}">browse all articles</a></p>
+                        {% else %}
+                        <h3>No blog posts yet</h3>
+                        <p>Check back later for new content!</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if posts.has_other_pages %}
+                <div class="pagination" data-scroll>
+                    <div class="pagination-content">
+                        {% if posts.has_previous %}
+                        <a href="?page={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="pagination-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        {% endif %}
+
+                        {% for num in posts.paginator.page_range %}
+                            {% if posts.number == num %}
+                            <span class="pagination-number active">{{ num }}</span>
+                            {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
+                            <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="pagination-number">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if posts.has_next %}
+                        <a href="?page={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="pagination-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="blog-sidebar">
+                <!-- Trending Posts -->
+                <div class="sidebar-widget" data-scroll>
+                    <h3 class="widget-title">Trending Now</h3>
+                    <div class="trending-posts">
+                        {% for post in trending_posts %}
+                        <div class="trending-post">
+                            <div class="trending-number">0{{ forloop.counter }}</div>
+                            <div class="trending-content">
+                                <h4>
+                                    <a href="{{ post.get_absolute_url }}">{{ post.title|truncatewords:6 }}</a>
+                                </h4>
+                                <span class="trending-views">{{ post.views }} views</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="sidebar-widget" data-scroll>
+                    <h3 class="widget-title">Categories</h3>
+                    <div class="categories-list">
+                        {% for category in categories %}
+                        <a href="{% url 'blog:blog_category' category.slug %}" class="category-item">
+                            <span class="category-name">{{ category.name }}</span>
+                            <span class="category-count">{{ category.num_posts }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Popular Tags -->
+                <div class="sidebar-widget" data-scroll>
+                    <h3 class="widget-title">Popular Tags</h3>
+                    <div class="tags-cloud">
+                        {% for tag in top_tags|slice:":15" %}
+                        <a href="?tag={{ tag.slug }}" class="tag-link">#{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                
+            </aside>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Search Styles */
+.hero-search {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#searchForm {
+    display: flex;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #A8844E;
+    box-shadow: 0 0 0 3px rgba(168, 132, 78, 0.1);
+}
+
+.search-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #A8844E;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn:hover {
+    background: #8a6b3b;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.search-suggestion-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-suggestion-item:hover {
+    background-color: #f8fafc;
+}
+
+.search-suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.search-suggestion-item i {
+    color: #A8844E;
+    font-size: 14px;
+}
+
+.search-suggestion-highlight {
+    background-color: #fff3cd;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.search-results-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-results-info h3 {
+    margin: 0 0 10px 0;
+    color: #2d3748;
+}
+
+.search-results-info p {
+    margin: 0 0 15px 0;
+    color: #718096;
+}
+
+.clear-search {
+    color: #A8844E;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.clear-search:hover {
+    text-decoration: underline;
+}
+
+/* Loading state */
+.search-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.search-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #A8844E;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* No results state */
+.no-posts {
+    text-align: center;
+    padding: 60px 20px;
+    grid-column: 1 / -1;
+}
+
+.no-posts h3 {
+    color: #2d3748;
+    margin-bottom: 10px;
+}
+
+.no-posts p {
+    color: #718096;
+}
+
+.no-posts a {
+    color: #A8844E;
+    text-decoration: none;
+}
+
+.no-posts a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-input {
+        padding: 12px 45px 12px 15px;
+        font-size: 14px;
+    }
+    
+    .search-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .search-suggestions {
+        max-height: 200px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.querySelector('.search-input');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    let searchTimeout;
+
+    // Search suggestions functionality
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        // Clear previous timeout
+        clearTimeout(searchTimeout);
+        
+        // Hide suggestions if query is empty
+        if (query.length === 0) {
+            searchSuggestions.style.display = 'none';
+            return;
+        }
+        
+        // Show loading state
+        searchInput.classList.add('search-loading');
+        
+        // Debounce search
+        searchTimeout = setTimeout(() => {
+            fetchSearchSuggestions(query);
+        }, 300);
+    });
+
+    // Fetch search suggestions from server
+    function fetchSearchSuggestions(query) {
+        fetch(`/blog/api/search-suggestions/?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                displaySearchSuggestions(data, query);
+                searchInput.classList.remove('search-loading');
+            })
+            .catch(error => {
+                console.error('Error fetching search suggestions:', error);
+                searchInput.classList.remove('search-loading');
+            });
+    }
+
+    // Display search suggestions
+    function displaySearchSuggestions(suggestions, query) {
+        if (suggestions.length === 0) {
+            searchSuggestions.style.display = 'none';
+            return;
+        }
+
+        const suggestionsHTML = suggestions.map(suggestion => `
+            <div class="search-suggestion-item" data-title="${suggestion.title}">
+                <i class="fas fa-search"></i>
+                <span>${highlightMatch(suggestion.title, query)}</span>
+            </div>
+        `).join('');
+
+        searchSuggestions.innerHTML = suggestionsHTML;
+        searchSuggestions.style.display = 'block';
+
+        // Add click event to suggestions
+        document.querySelectorAll('.search-suggestion-item').forEach(item => {
+            item.addEventListener('click', function() {
+                searchInput.value = this.getAttribute('data-title');
+                searchSuggestions.style.display = 'none';
+                searchForm.submit();
+            });
+        });
+    }
+
+    // Highlight matching text in suggestions
+    function highlightMatch(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<span class="search-suggestion-highlight">$1</span>');
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchForm.contains(e.target)) {
+            searchSuggestions.style.display = 'none';
+        }
+    });
+
+    // Handle form submission
+    searchForm.addEventListener('submit', function(e) {
+        const query = searchInput.value.trim();
+        if (query.length === 0) {
+            e.preventDefault();
+        }
+    });
+
+    // Keyboard navigation for suggestions
+    searchInput.addEventListener('keydown', function(e) {
+        const suggestions = document.querySelectorAll('.search-suggestion-item');
+        let currentFocus = -1;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            currentFocus++;
+            setActiveSuggestion(suggestions, currentFocus);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            currentFocus--;
+            setActiveSuggestion(suggestions, currentFocus);
+        } else if (e.key === 'Enter' && currentFocus > -1) {
+            e.preventDefault();
+            suggestions[currentFocus].click();
+        }
+    });
+
+    function setActiveSuggestion(suggestions, index) {
+        suggestions.forEach(suggestion => suggestion.classList.remove('active'));
+        if (suggestions[index]) {
+            suggestions[index].classList.add('active');
+        }
+    }
+
+    // Client-side search filtering (optional enhancement)
+    function filterPosts(query) {
+        const posts = document.querySelectorAll('.post-card');
+        let visibleCount = 0;
+
+        posts.forEach(post => {
+            const title = post.getAttribute('data-title');
+            const content = post.getAttribute('data-content');
+            const category = post.getAttribute('data-category');
+            const tags = post.getAttribute('data-tags');
+
+            const matches = title.includes(query) || 
+                           content.includes(query) || 
+                           category.includes(query) || 
+                           tags.includes(query);
+
+            if (matches) {
+                post.style.display = 'block';
+                visibleCount++;
+            } else {
+                post.style.display = 'none';
+            }
+        });
+
+        // Show no results message if no posts match
+        const noPostsElement = document.querySelector('.no-posts');
+        if (visibleCount === 0 && query.length > 0) {
+            if (!noPostsElement) {
+                const postsGrid = document.querySelector('.posts-grid');
+                postsGrid.innerHTML = `
+                    <div class="no-posts" data-scroll>
+                        <h3>No results found for "${query}"</h3>
+                        <p>Try different keywords</p>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    // Scroll animation for blog elements
+    const scrollElements = document.querySelectorAll('[data-scroll]');
+    
+    const elementInView = (el, dividend = 1) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return (
+            elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+        );
+    };
+    
+    const displayScrollElement = (element) => {
+        element.classList.add('is-visible');
+    };
+    
+    const handleScrollAnimation = () => {
+        scrollElements.forEach((el, index) => {
+            if (elementInView(el, 1.2)) {
+                setTimeout(() => {
+                    displayScrollElement(el);
+                }, index * 150);
+            }
+        });
+    };
+    
+    // Initial check
+    handleScrollAnimation();
+    
+    // Listen for scroll events
+    window.addEventListener('scroll', handleScrollAnimation);
+
+    // Smooth scroll for pagination
+    document.querySelectorAll('.pagination-number, .pagination-btn').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetPage = this.href;
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            setTimeout(() => {
+                window.location.href = targetPage;
+            }, 500);
+        });
+    });
+});
+</script>
+{% endblock content %}
