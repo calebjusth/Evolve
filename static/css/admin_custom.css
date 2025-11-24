@@ -1,0 +1,308 @@
+/* static/css/admin_custom.css */
+
+:root {
+    --electric-green: #c6a25b;
+    --deep-cyan-green: #045953;
+    --golden-brown: #c6a25b;
+    --off-white: #F9F9F9;
+    --light-gray: #DADADA;
+    --white: #FFFFFF;
+    --black: #000000;
+    
+    /* Button variants */
+    --success-green: #c6a25b;
+    --info-blue: #17a2b8;
+    --warning-orange: #ffc107;
+    --danger-red: #dc3545;
+}
+
+/* Import Orbitron and Avenir/Arial fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+/* Global font settings */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Headers use Orbitron */
+h1, h2, h3, h4, h5, h6, 
+.navbar-brand, 
+.brand-link, 
+.main-header .navbar-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+}
+
+/* Logo styling - remove circular boundary */
+.brand-link {
+    border-bottom: none !important;
+}
+
+.brand-image {
+    border-radius: 0 !important;
+    max-height: 33px !important;
+    width: auto !important;
+}
+
+/* ===== BUTTON STYLING ===== */
+
+/* Primary buttons (Save, Continue, etc.) */
+.btn-primary, .btn-primary-custom {
+    background-color: var(--electric-green) !important;
+    border-color: var(--electric-green) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+}
+
+.btn-primary:hover, .btn-primary-custom:hover {
+    background-color: #d3a96b !important;
+    border-color: #c6a25b !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(1, 177, 47, 0.3);
+}
+
+/* Success buttons (Add, Create, etc.) */
+.btn-success, .btn-success-custom {
+    background-color: var(--success-green) !important;
+    border-color: var(--success-green) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+}
+
+.btn-success:hover, .btn-success-custom:hover {
+    background-color: #c6a25b !important;
+    border-color: #c6a25b !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+
+/* Resize the main logo */
+.site-logo {
+    max-height: 40px !important;
+    width: auto !important;
+}
+
+/* Resize the favicon in browser tab */
+.link[rel="icon"] {
+    max-height: 16px !important;
+    width: 16px !important;
+}
+
+/* Resize login page logo if needed */
+.login-logo img {
+    max-height: 80px !important;
+    width: auto !important;
+}
+
+
+
+/* Info buttons (View, View on site, etc.) */
+.btn-info, .btn-info-custom {
+    background-color: var(--info-blue) !important;
+    border-color: var(--info-blue) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+}
+
+.btn-info:hover, .btn-info-custom:hover {
+    background-color: #138496 !important;
+    border-color: #138496 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* Warning buttons (Change, Edit, etc.) */
+.btn-warning, .btn-warning-custom {
+    background-color: var(--golden-brown) !important;
+    border-color: var(--golden-brown) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+}
+
+.btn-warning:hover, .btn-warning-custom:hover {
+    background-color: #967341 !important;
+    border-color: #967341 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(168, 132, 78, 0.3);
+}
+
+/* Danger buttons (Delete, Remove, etc.) */
+.btn-danger, .btn-danger-custom {
+    background-color: var(--danger-red) !important;
+    border-color: var(--danger-red) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+}
+
+.btn-danger:hover, .btn-danger-custom:hover {
+    background-color: #c82333 !important;
+    border-color: #c82333 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Secondary buttons (Close, Cancel, etc.) */
+.btn-secondary, .btn-secondary-custom {
+    background-color: var(--light-gray) !important;
+    border-color: var(--light-gray) !important;
+    color: var(--deep-cyan-green) !important;
+    font-weight: 600;
+}
+
+.btn-secondary:hover, .btn-secondary-custom:hover {
+    background-color: #c8c8c8 !important;
+    border-color: #c8c8c8 !important;
+    transform: translateY(-1px);
+}
+
+/* ===== USER PROFILE STYLING ===== */
+
+/* User profile picture in navbar */
+.user-panel {
+    border-bottom: 1px solid rgba(1, 177, 47, 0.3) !important;
+}
+
+.user-panel .image img {
+    border-radius: 50% !important;
+    border: 2px solid var(--electric-green) !important;
+    padding: 2px;
+    background: var(--white);
+}
+
+.user-panel .info {
+    color: var(--off-white) !important;
+}
+
+.user-panel .info a:hover {
+    color: var(--electric-green) !important;
+}
+
+/* Login user profile */
+.img-circle {
+    border-radius: 50% !important;
+    border: 3px solid var(--electric-green) !important;
+}
+
+/* ===== NAVBAR STYLING ===== */
+.main-header.navbar {
+    background-color: var(--deep-cyan-green) !important;
+    border-bottom: 2px solid var(--electric-green) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: var(--off-white) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--electric-green) !important;
+}
+
+/* ===== SIDEBAR STYLING ===== */
+.main-sidebar {
+    background-color: var(--deep-cyan-green) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: var(--electric-green) !important;
+    color: var(--white) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link:hover {
+    background-color: rgba(1, 177, 47, 0.2) !important;
+    color: var(--electric-green) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link {
+    color: var(--light-gray) !important;
+}
+
+/* ===== FORM STYLING ===== */
+.form-control:focus {
+    border-color: var(--electric-green) !important;
+    box-shadow: 0 0 0 0.2rem rgba(1, 177, 47, 0.25) !important;
+}
+
+/* ===== CARD HEADERS ===== */
+.card-header {
+    background-color: var(--deep-cyan-green) !important;
+    color: var(--off-white) !important;
+    border-bottom: 1px solid var(--electric-green) !important;
+}
+
+/* ===== TABLE STYLING ===== */
+.table thead th {
+    background-color: var(--deep-cyan-green) !important;
+    color: var(--off-white) !important;
+    border-bottom: 2px solid var(--electric-green) !important;
+}
+
+/* ===== LINKS ===== */
+a {
+    color: var(--electric-green) !important;
+}
+
+a:hover {
+    color: var(--golden-brown) !important;
+}
+
+/* ===== LOGIN PAGE STYLING ===== */
+.login-page {
+    background-color: var(--deep-cyan-green) !important;
+}
+
+.login-box, .register-box {
+    width: 400px;
+}
+
+.login-logo a, .register-logo a {
+    color: var(--electric-green) !important;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+}
+
+.login-card-body, .register-card-body {
+    background-color: var(--off-white) !important;
+    border-top: 3px solid var(--electric-green) !important;
+}
+
+/* ===== PAGINATION ===== */
+.page-item.active .page-link {
+    background-color: var(--electric-green) !important;
+    border-color: var(--electric-green) !important;
+}
+
+.page-link {
+    color: var(--electric-green) !important;
+}
+
+.page-link:hover {
+    color: var(--deep-cyan-green) !important;
+}
+
+/* ===== BADGES ===== */
+.badge-primary {
+    background-color: var(--electric-green) !important;
+}
+
+.badge-secondary {
+    background-color: var(--golden-brown) !important;
+}
+
+/* ===== CONTENT HEADER ===== */
+.content-header h1 {
+    color: var(--deep-cyan-green) !important;
+}
+
+/* ===== ALERT STYLING ===== */
+.alert-success {
+    background-color: rgba(1, 177, 47, 0.1) !important;
+    border-color: var(--electric-green) !important;
+    color: var(--deep-cyan-green) !important;
+}
+
+.alert-warning {
+    background-color: rgba(168, 132, 78, 0.1) !important;
+    border-color: var(--golden-brown) !important;
+    color: var(--deep-cyan-green) !important;
+}
